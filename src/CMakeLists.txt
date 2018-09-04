@@ -1,0 +1,5 @@
+add_executable(noteconv main.cpp)
+set_property(TARGET noteconv PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET noteconv PROPERTY CXX_EXTENSIONS OFF)
+target_compile_options(noteconv PRIVATE ${custom_compile_options})
+install(TARGETS noteconv DESTINATION bin)
