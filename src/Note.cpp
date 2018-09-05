@@ -11,7 +11,15 @@ MidiNote::MidiNote(Pitch notePitch)
     
 }
 
-std::ostream& MidiNote::operator<<(std::ostream& os){ return os; }
+std::ostream& MidiNote::operator<<(std::ostream& os)
+{
+    return os << midiNote;
+}
+
+Frequency::Frequency(MidiNote midiNote)
+{
+    frequency = std::pow(2.0, (midiNote.get() - 69) / 12) * 440;
+}
 
 Frequency::Frequency(float noteFrequency){}
 Frequency::Frequency(MidiNote midiNote){}

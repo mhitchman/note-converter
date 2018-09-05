@@ -7,7 +7,7 @@ class Pitch;
 class MidiNote
 {
 public:
-    MidiNote(){};
+    MidiNote():midiNote(0){};
     MidiNote(int noteNumber):midiNote(noteNumber){}
     MidiNote(Frequency noteFrequency);
     MidiNote(Pitch notePitch);
@@ -21,8 +21,8 @@ private:
 class Frequency
 {
 public:
-    Frequency(){};
-    Frequency(float noteFrequency);
+    Frequency():frequency(0.0f){};
+    Frequency(float noteFrequency):frequency(noteFrequency){}
     Frequency(MidiNote midiNote);
     Frequency(Pitch notePitch);
     float get(){ return frequency; }
@@ -38,10 +38,10 @@ public:
     Pitch(std::string noteName);
     Pitch(Frequency noteFrequency);
     Pitch(MidiNote midiNote);
-    std::string get(){ return noteNumber; }
+    std::string get(){ return pitch; }
     std::ostream& operator<<(std::ostream& os);
 private:
-    std::string noteNumber;
+    std::string pitch;
 };
 
 class Note

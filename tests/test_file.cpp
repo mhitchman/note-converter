@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
 #include <Note.h>
 
-TEST_CASE ( "Midi" )
+TEST_CASE ( "Midi", "[midi]" )
 {
     SECTION ( "MIDI -> MIDI" )
     {
@@ -11,14 +11,14 @@ TEST_CASE ( "Midi" )
 
     SECTION ( "Frequency -> MIDI" )
     {
-	MidiNote midiNote = Frequency(440);
-	REQUIRE ( midiNote.get() == 69 );
+	MidiNote midiNote = Frequency(392);
+	REQUIRE ( midiNote.get() == 67 );
     }
 
     SECTION ( "Pitch -> MIDI" )
     {
-	MidiNote midiNote = Pitch("A4");
-	REQUIRE ( midiNote.get() == 69 );
+	MidiNote midiNote = Pitch("F4");
+	REQUIRE ( midiNote.get() == 65 );
     }
 }
 
@@ -27,19 +27,19 @@ TEST_CASE ( "Frequency" )
     SECTION ( "Frequency -> Frequency" )
     {
 	Frequency frequency(440);
-	REQUIRE ( frequency.get() == 440 );
+	REQUIRE ( frequency.get() == 440.0f );
     }
 
     SECTION ( "MIDI -> Frequency" )
     {
-	Frequency frequency = MidiNote(69);
-	REQUIRE ( frequency.get() == 440 );
+	Frequency frequency = MidiNote(67);
+	REQUIRE ( frequency.get() == 392.0f );
     }
 
     SECTION ( "Pitch -> Frequency" )
     {
-	Frequency frequency = Pitch("A4");
-	REQUIRE ( frequency.get() == 440 );
+	Frequency frequency = Pitch("F4");
+	REQUIRE ( frequency.get() == 349.23f );
     }
 }
 
