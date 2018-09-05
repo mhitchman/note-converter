@@ -1,13 +1,18 @@
-z#include <string>
+#include <string>
 #include <iostream>
+
+class Frequency;
+class Pitch;
 
 class MidiNote
 {
 public:
-    explicit MidiNote(int noteNumber);
-    explicit MidiNote(Frequency noteFrequency);
-    explicit MidiNote(Pitch notePitch);
+    MidiNote(){};
+    MidiNote(int noteNumber):midiNote(noteNumber){}
+    MidiNote(Frequency noteFrequency);
+    MidiNote(Pitch notePitch);
 
+    int get(){ return midiNote; }
     std::ostream& operator<<(std::ostream& os);
 private:
     int midiNote;
@@ -16,18 +21,25 @@ private:
 class Frequency
 {
 public:
-    explicit Frequency(float noteFrequency);
-    explicit Frequency(MidiNote midiNote);
-    explicit Frequency(Pitch notePitch);
+    Frequency(){};
+    Frequency(float noteFrequency);
+    Frequency(MidiNote midiNote);
+    Frequency(Pitch notePitch);
+    float get(){ return frequency; }
+    std::ostream& operator<<(std::ostream& os);
 private:
     float frequency;
 };
+
 class Pitch
 {
 public:
-    explicit Pitch(std::string noteName);
-    explicit Pitch(Frequency noteFrequency);
-    explicit Pitch(Pitch notePitch);
+    Pitch(){};
+    Pitch(std::string noteName);
+    Pitch(Frequency noteFrequency);
+    Pitch(MidiNote midiNote);
+    std::string get(){ return noteNumber; }
+    std::ostream& operator<<(std::ostream& os);
 private:
     std::string noteNumber;
 };
@@ -35,9 +47,9 @@ private:
 class Note
 {
 public:
-    explicit Note(std::string noteName);
-    explicit Note(Frequency noteFrequency);
-    explicit Note(Pitch notePitch);
+    Note(std::string noteName);
+    Note(Frequency noteFrequency);
+    Note(Pitch notePitch);
 
     Frequency getFrequency() { return frequency; }
     MidiNote getMidiNote() { return midiNote; }
