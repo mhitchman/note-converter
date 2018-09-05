@@ -1,4 +1,5 @@
 #include <catch2/catch.hpp>
+#include <cmath>
 #include <Note.h>
 
 TEST_CASE ( "Midi", "[midi]" )
@@ -27,19 +28,19 @@ TEST_CASE ( "Frequency" )
     SECTION ( "Frequency -> Frequency" )
     {
 	Frequency frequency(440);
-	REQUIRE ( frequency.get() == 440.0f );
+	REQUIRE ( frequency.get() == Approx(440.0f) );
     }
 
     SECTION ( "MIDI -> Frequency" )
     {
 	Frequency frequency = MidiNote(67);
-	REQUIRE ( frequency.get() == 392.0f );
+	REQUIRE ( frequency.get() == Approx(392.0) );
     }
 
     SECTION ( "Pitch -> Frequency" )
     {
 	Frequency frequency = Pitch("F4");
-	REQUIRE ( frequency.get() == 349.23f );
+	REQUIRE ( frequency.get() == Approx(349.23f) );
     }
 }
 
