@@ -12,10 +12,11 @@ public:
     MidiNote(Frequency noteFrequency);
     MidiNote(Pitch notePitch);
 
-    int get(){ return midiNote; }
+    int getRounded();
+    float get(){ return midiNote; }
     std::ostream& operator<<(std::ostream& os);
 private:
-    int midiNote;
+    float midiNote;
 };
 
 class Frequency
@@ -25,10 +26,11 @@ public:
     Frequency(float noteFrequency):frequency(noteFrequency){}
     Frequency(MidiNote midiNote);
     Frequency(Pitch notePitch);
-    float get(){ return frequency; }
+    double get(){ return frequency; }
+    double getRounded();
     std::ostream& operator<<(std::ostream& os);
 private:
-    float frequency;
+    double frequency;
 };
 
 class Pitch

@@ -1,14 +1,21 @@
 #include <Note.h>
 #include <cmath>
+#include <iomanip>
+#include <sstream>
 
 MidiNote::MidiNote(Frequency noteFrequency)
 {
-    float tmp = 12 * std::log2(noteFrequency.get() / 440) + 69;
-    midiNote = static_cast<int>(tmp);
+    midiNote = 12 * std::log2(noteFrequency.get() / 440) + 69;
 }
 MidiNote::MidiNote(Pitch notePitch)
 {
     
+}
+
+int MidiNote::getRounded()
+{
+    float note = midiNote;
+    return std::round(note);
 }
 
 std::ostream& MidiNote::operator<<(std::ostream& os)
@@ -24,6 +31,15 @@ Frequency::Frequency(MidiNote midiNote)
 Frequency::Frequency(Pitch notePitch)
 {
 
+}
+
+double Frequency::getRounded()
+{
+    std::stringstream ss;
+    ss << std::setprecision(2) << std::fixed << frequency;
+    double rounded;
+    ss >> rounded;
+    return rounded;
 }
 
 std::ostream& Frequency::operator<<(std::ostream& os)

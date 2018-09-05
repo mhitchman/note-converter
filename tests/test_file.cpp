@@ -13,7 +13,9 @@ TEST_CASE ( "Midi", "[midi]" )
     SECTION ( "Frequency -> MIDI" )
     {
 	MidiNote midiNote = Frequency(392);
-	REQUIRE ( midiNote.get() == 67 );
+	REQUIRE ( midiNote.getRounded() == 67 );
+	Frequency frequency = midiNote;
+	REQUIRE ( frequency.getRounded() == 392.0 );
     }
 
     SECTION ( "Pitch -> MIDI" )
@@ -28,19 +30,22 @@ TEST_CASE ( "Frequency" )
     SECTION ( "Frequency -> Frequency" )
     {
 	Frequency frequency(440);
-	REQUIRE ( frequency.get() == Approx(440.0f) );
+	REQUIRE ( frequency.get() == Approx(440.0) );
+	REQUIRE ( frequency.getRounded() == 440.0 );
     }
 
     SECTION ( "MIDI -> Frequency" )
     {
 	Frequency frequency = MidiNote(67);
 	REQUIRE ( frequency.get() == Approx(392.0) );
+	REQUIRE ( frequency.getRounded() == 392.0 );
     }
 
     SECTION ( "Pitch -> Frequency" )
     {
 	Frequency frequency = Pitch("F4");
-	REQUIRE ( frequency.get() == Approx(349.23f) );
+	REQUIRE ( frequency.get() == Approx(349.23) );
+	REQUIRE ( frequency.getRounded() == 349.23 );
     }
 }
 
@@ -54,7 +59,7 @@ TEST_CASE ( "Pitch" )
 
     SECTION ( "Frequency -> Pitch" )
     {
-	Pitch pitch = Frequency(440);
+	Pitch pitch = Frequency(392.0);
 	REQUIRE ( pitch.get() == "A4" );
 
 	pitch = Frequency(13.75);
