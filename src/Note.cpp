@@ -10,6 +10,7 @@ MidiNote::MidiNote(Frequency noteFrequency)
 {
     midiNote = 12 * std::log2(noteFrequency.get() / 440) + 69;
 }
+
 MidiNote::MidiNote(Pitch /*notePitch*/)
     :midiNote(0)
 {
@@ -106,7 +107,7 @@ std::string Pitch::validateOctaveValue(char oct, bool throwError)
 {
     std::string result;
 
-    result = std::isdigit(oct) ? std::string(1, oct) : "";
+    result = std::isdigit(oct) != 0 ? std::string(1, oct) : "";
 
     if (result.empty() && throwError)
     {
@@ -152,19 +153,19 @@ Pitch::Pitch(std::string noteName)
 
 void Pitch::convertToMidiRepresentation()
 {
-    // get the index of the note name in the possibleNoteNames
-    // add 1 if mod is sharp
-    // minus 1 if mod is flat
-    // 12 + octave * 12 + notenum
 
     int noteIndex = std::distance(possibleNoteNames.begin(),
 				  std::find(possibleNoteNames.begin(), possibleNoteNames.end(), note[0]));
     if (!modifier.empty())
     {	
 	if (modifier[0] == sharp)
+	{
 	    noteIndex++;
+	}
 	else if (modifier[0] == flat)
+	{
 	    noteIndex--;
+	}
     }
 
     int notesInScale = 12;
@@ -186,22 +187,31 @@ Pitch::Pitch(MidiNote midiNote)
 {
     midiRepresentation = midiNote;
     int normalisedValue = midiNote.getRounded() % 12;
-    // (- i (if (< i 5)
-    // 	       (floor (/ i 2))
-    // 	       (floor (/ (1- i) 2)))))
-    int difference;
+    float difference;
     if (normalisedValue < 5)
     {
-	difference = normalisedValue / 2;
+	difference = normalisedValue / 2.0f;
     }
     else
     {
-	difference = normalisedValue - 1 / 2;
+	difference = (normalisedValue - 1) / 2.0f;
     }
-    note = possibleNoteValues[normalisedValue - difference];
+    note = possibleNoteNames[normalisedValue - difference];
+    float fractionalPart = std::modf(difference, &difference);
+    if (fractionalPart != 0)
+    {
+	modifier = sharp;
+    }
 
-    // Work out whether its flat or sharp
-    // Work out what octave it is
+    int octaveNumber = std::floor(midiNote.getRounded() / 12.0f - 1.0);
+    if (octaveNumber >= 0)
+    {
+	octave = std::to_string(octaveNumber);
+    }
+    else
+    {
+	octave.clear();
+    }
 }
 
 std::ostream& Pitch::operator<<(std::ostream& os){ return os; }

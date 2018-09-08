@@ -53,7 +53,7 @@ private:
     std::string validateOctaveValue(char oct, bool throwError=false);
     void convertToMidiRepresentation();
     MidiNote midiRepresentation;
-    const std::vector<char> possibleNoteNames = {'C', 'D', 'E', 'F', 'G', 'A', 'B'};
+    const std::vector<char> possibleNoteNames = {'c', 'd', 'e', 'f', 'g', 'a', 'b'};
     const char sharp = 's';
     const char flat = 'f';
     std::string note;

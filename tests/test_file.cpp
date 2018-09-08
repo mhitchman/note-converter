@@ -54,21 +54,27 @@ TEST_CASE ( "Pitch" )
     SECTION ( "Pitch -> Pitch" )
     {
 	Pitch pitch("A4");
-	REQUIRE ( pitch.get() == "A4" );
+	REQUIRE ( pitch.get() == "a4" );
     }
 
     SECTION ( "Frequency -> Pitch" )
     {
 	Pitch pitch = Frequency(392.0);
-	REQUIRE ( pitch.get() == "A4" );
+	REQUIRE ( pitch.get() == "a4" );
 
 	pitch = Frequency(13.75);
-	REQUIRE ( pitch.get() == "A" );
+	REQUIRE ( pitch.get() == "a" );
     }
 
     SECTION ( "MIDI -> Pitch" )
     {
-	Pitch pitch = MidiNote(69);
-	REQUIRE ( pitch.get() == "A4" );
+	{
+	    Pitch pitch = MidiNote(69);
+	    REQUIRE ( pitch.get() == "a4" );
+	}
+	{
+	    Pitch pitch = MidiNote(3);
+	    REQUIRE ( pitch.get() == "ds" );
+	}
     }
 }
