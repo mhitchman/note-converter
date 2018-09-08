@@ -1,13 +1,17 @@
 #include <Note.h>
+#include <algorithm>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
+#include <stdexcept>
 
 MidiNote::MidiNote(Frequency noteFrequency)
+    :midiNote(0)
 {
     midiNote = 12 * std::log2(noteFrequency.get() / 440) + 69;
 }
-MidiNote::MidiNote(Pitch notePitch)
+MidiNote::MidiNote(Pitch /*notePitch*/)
+    :midiNote(0)
 {
     
 }
@@ -20,15 +24,18 @@ int MidiNote::getRounded()
 
 std::ostream& MidiNote::operator<<(std::ostream& os)
 {
-    return os << midiNote;
+    os << midiNote;
+    return os;
 }
 
 Frequency::Frequency(MidiNote midiNote)
+    :frequency(0.0)
 {
     frequency = std::pow(2.0, (midiNote.get() - 69.0) / 12) * 440;
 }
 
-Frequency::Frequency(Pitch notePitch)
+Frequency::Frequency(Pitch /*notePitch*/)
+    :frequency(0.0)
 {
 
 }
@@ -47,11 +54,158 @@ std::ostream& Frequency::operator<<(std::ostream& os)
     return os << frequency;
 }
 
-Pitch::Pitch(std::string noteName){}
-Pitch::Pitch(Frequency noteFrequency){}
-Pitch::Pitch(MidiNote midiNote){}
+bool Pitch::validatePitchString(std::string pitchName)
+{
+    bool result = true;
+    if ((pitchName.empty()) || (pitchName.length() > 3))
+    {
+	result = false;
+    }
+    else if (!std::all_of(pitchName.begin(),
+			  pitchName.end(),
+			  [](char c){ return std::isalnum(c); }))
+    {
+	result = false;
+    }
+    return result;
+}
+
+char Pitch::validateNoteName(char note)
+{
+    // If the note is valid return it as a string
+    // Otherwise throw an error
+
+    auto position = std::find(possibleNoteNames.begin(), possibleNoteNames.end(),  note); 
+    if ( position == possibleNoteNames.end())
+    {
+	std::ostringstream err;
+	err << "Invalid note name: " << note;
+	throw std::invalid_argument(err.str());
+    }
+
+    return note;
+}
+
+std::string Pitch::validateModifier(const char& mod, bool throwError)
+{
+    // If it's a valid modifier return mod as a string
+    // Otherwise return an empty string
+    std::string result;
+    result = ((mod == sharp) || (mod == flat)) ? std::string(1, mod) : "";
+
+    if (result.empty() && throwError)
+    {
+	std::string err = "Invalid note modifier: ";
+	err += mod;
+	throw std::invalid_argument(err);
+    }
+    return result;
+}
+
+std::string Pitch::validateOctaveValue(char oct, bool throwError)
+{
+    std::string result;
+
+    result = std::isdigit(oct) ? std::string(1, oct) : "";
+
+    if (result.empty() && throwError)
+    {
+	std::string err = "Invalid octave value: ";
+	err += oct;
+	throw std::invalid_argument(err);
+    }
+
+    return result;
+}
+
+Pitch::Pitch(std::string noteName)
+{
+    std::transform(noteName.begin(), noteName.end(), noteName.begin(), ::tolower);
+    if (!validatePitchString(noteName))
+    {
+	std::ostringstream err;
+	err << "Invalid pitch name: " << noteName;
+	throw std::invalid_argument(err.str());
+    }
+
+    note = validateNoteName(noteName[0]);
+    
+    switch(noteName.length())
+    {
+    case 2:
+	modifier = validateModifier(noteName[1]);
+	octave = validateOctaveValue(noteName[1]);
+	if (modifier.empty() && octave.empty())
+	{
+	    std::string err = "Argument neither valid modifier or octave: ";
+	    err += noteName[1];
+	    throw std::invalid_argument(err);
+	}
+    	break;
+    case 3:
+	modifier = validateModifier(noteName[1], true);
+	octave = validateOctaveValue(noteName[2], true);
+    	break;
+    }
+    convertToMidiRepresentation();
+}
+
+void Pitch::convertToMidiRepresentation()
+{
+    // get the index of the note name in the possibleNoteNames
+    // add 1 if mod is sharp
+    // minus 1 if mod is flat
+    // 12 + octave * 12 + notenum
+
+    int noteIndex = std::distance(possibleNoteNames.begin(),
+				  std::find(possibleNoteNames.begin(), possibleNoteNames.end(), note[0]));
+    if (!modifier.empty())
+    {	
+	if (modifier[0] == sharp)
+	    noteIndex++;
+	else if (modifier[0] == flat)
+	    noteIndex--;
+    }
+
+    int notesInScale = 12;
+    int octaveNumber = std::stoi(octave);
+    midiRepresentation = notesInScale + octaveNumber * notesInScale + noteIndex;
+}
+    
+Pitch& Pitch::operator=(const Frequency& /*noteFrequency*/)
+{
+    this->note = "garbage";
+    this->modifier = "garbage";
+    this->octave = "garbage";
+    midiRepresentation = 0;
+    return *this;
+}
+
+Pitch::Pitch(Frequency /*noteFrequency*/){}
+Pitch::Pitch(MidiNote midiNote)
+{
+    midiRepresentation = midiNote;
+    int normalisedValue = midiNote.getRounded() % 12;
+    // (- i (if (< i 5)
+    // 	       (floor (/ i 2))
+    // 	       (floor (/ (1- i) 2)))))
+    int difference;
+    if (normalisedValue < 5)
+    {
+	difference = normalisedValue / 2;
+    }
+    else
+    {
+	difference = normalisedValue - 1 / 2;
+    }
+    note = possibleNoteValues[normalisedValue - difference];
+
+    // Work out whether its flat or sharp
+    // Work out what octave it is
+}
+
 std::ostream& Pitch::operator<<(std::ostream& os){ return os; }
 
-Note::Note(std::string noteName){}
-Note::Note(Frequency noteFrequency){}
-Note::Note(Pitch notePitch){}
+Note::Note(std::string /*noteName*/){}
+Note::Note(Frequency /*noteFrequency*/){}
+Note::Note(Pitch /*notePitch*/){}

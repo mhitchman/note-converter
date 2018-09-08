@@ -1,3 +1,4 @@
+#include <vector>
 #include <string>
 #include <iostream>
 
@@ -40,10 +41,24 @@ public:
     Pitch(std::string noteName);
     Pitch(Frequency noteFrequency);
     Pitch(MidiNote midiNote);
-    std::string get(){ return pitch; }
+
+    Pitch& operator=(const Frequency& noteFrequency);
+
+    std::string get(){ return note + modifier + octave; }
     std::ostream& operator<<(std::ostream& os);
 private:
-    std::string pitch;
+    bool validatePitchString(std::string pitchName);
+    char validateNoteName(char note);
+    std::string validateModifier(const char& mod, bool throwError=false);
+    std::string validateOctaveValue(char oct, bool throwError=false);
+    void convertToMidiRepresentation();
+    MidiNote midiRepresentation;
+    const std::vector<char> possibleNoteNames = {'C', 'D', 'E', 'F', 'G', 'A', 'B'};
+    const char sharp = 's';
+    const char flat = 'f';
+    std::string note;
+    std::string modifier;
+    std::string octave;
 };
 
 class Note
