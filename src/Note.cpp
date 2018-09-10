@@ -5,19 +5,17 @@
 #include <sstream>
 #include <stdexcept>
 
-MidiNote::MidiNote(Frequency noteFrequency)
+MidiNote::MidiNote(const Frequency& noteFrequency)
     :midiNote(0)
 {
     midiNote = 12 * std::log2(noteFrequency.get() / 440) + 69;
 }
 
-MidiNote::MidiNote(Pitch /*notePitch*/)
-    :midiNote(0)
-{
-    
-}
+MidiNote::MidiNote(const Pitch& notePitch)
+    :MidiNote(notePitch.getMidi())
+{}
 
-int MidiNote::getRounded()
+int MidiNote::getRounded() const
 {
     float note = midiNote;
     return std::round(note);
@@ -35,13 +33,11 @@ Frequency::Frequency(MidiNote midiNote)
     frequency = std::pow(2.0, (midiNote.get() - 69.0) / 12) * 440;
 }
 
-Frequency::Frequency(Pitch /*notePitch*/)
-    :frequency(0.0)
-{
+Frequency::Frequency(const Pitch& notePitch)
+    :Frequency(notePitch.getMidi())
+{}
 
-}
-
-double Frequency::getRounded()
+double Frequency::getRounded() const
 {
     std::stringstream ss;
     ss << std::setprecision(2) << std::fixed << frequency;
@@ -173,16 +169,30 @@ void Pitch::convertToMidiRepresentation()
     midiRepresentation = notesInScale + octaveNumber * notesInScale + noteIndex;
 }
     
-Pitch& Pitch::operator=(const Frequency& /*noteFrequency*/)
+void Pitch::operator=(const Frequency& noteFrequency)
 {
-    this->note = "garbage";
-    this->modifier = "garbage";
-    this->octave = "garbage";
-    midiRepresentation = 0;
-    return *this;
+    *this = Pitch(noteFrequency);
 }
 
-Pitch::Pitch(Frequency /*noteFrequency*/){}
+void Pitch::operator=(const MidiNote& midiNote)
+{
+    *this = Pitch(midiNote);
+}
+
+void Pitch::operator=(const Pitch& pitch)
+{
+    this->note = pitch.note;
+    this->modifier = pitch.modifier;
+    this->octave = pitch.octave;
+    this->midiRepresentation = pitch.midiRepresentation;
+}
+
+Pitch::Pitch(Frequency noteFrequency)
+{
+    MidiNote midiStep(noteFrequency);
+    *this = Pitch(midiStep);
+}
+
 Pitch::Pitch(MidiNote midiNote)
 {
     midiRepresentation = midiNote;

@@ -60,7 +60,7 @@ TEST_CASE ( "Pitch" )
     SECTION ( "Frequency -> Pitch" )
     {
 	Pitch pitch = Frequency(392.0);
-	REQUIRE ( pitch.get() == "a4" );
+	REQUIRE ( pitch.get() == "g4" );
 
 	pitch = Frequency(13.75);
 	REQUIRE ( pitch.get() == "a" );

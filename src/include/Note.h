@@ -10,11 +10,11 @@ class MidiNote
 public:
     MidiNote():midiNote(0){};
     MidiNote(int noteNumber):midiNote(noteNumber){}
-    MidiNote(Frequency noteFrequency);
-    MidiNote(Pitch notePitch);
+    MidiNote(const Frequency& noteFrequency);
+    MidiNote(const Pitch& notePitch);
 
-    int getRounded();
-    float get(){ return midiNote; }
+    int getRounded() const;
+    float get() const { return midiNote; }
     std::ostream& operator<<(std::ostream& os);
 private:
     float midiNote;
@@ -26,9 +26,9 @@ public:
     Frequency():frequency(0.0f){};
     Frequency(float noteFrequency):frequency(noteFrequency){}
     Frequency(MidiNote midiNote);
-    Frequency(Pitch notePitch);
-    double get(){ return frequency; }
-    double getRounded();
+    Frequency(const Pitch& notePitch);
+    double get() const { return frequency; }
+    double getRounded() const;
     std::ostream& operator<<(std::ostream& os);
 private:
     double frequency;
@@ -42,20 +42,26 @@ public:
     Pitch(Frequency noteFrequency);
     Pitch(MidiNote midiNote);
 
-    Pitch& operator=(const Frequency& noteFrequency);
+    void operator=(const Frequency& noteFrequency);
+    void operator=(const Pitch& pitch);
+    void operator=(const MidiNote& midiNote);
 
     std::string get(){ return note + modifier + octave; }
     std::ostream& operator<<(std::ostream& os);
+
+    MidiNote getMidi() const { return midiRepresentation; }
 private:
     bool validatePitchString(std::string pitchName);
     char validateNoteName(char note);
     std::string validateModifier(const char& mod, bool throwError=false);
     std::string validateOctaveValue(char oct, bool throwError=false);
     void convertToMidiRepresentation();
-    MidiNote midiRepresentation;
+   
     const std::vector<char> possibleNoteNames = {'c', 'd', 'e', 'f', 'g', 'a', 'b'};
     const char sharp = 's';
     const char flat = 'f';
+    
+    MidiNote midiRepresentation; 
     std::string note;
     std::string modifier;
     std::string octave;
