@@ -70,8 +70,9 @@ private:
 class Note
 {
 public:
-    Note(const std::string& noteName)
-	: frequency(Frequency(noteName)), midiNote(MidiNote(noteName)), pitch(Pitch(noteName))
+    Note(){};
+    Note(const MidiNote& midiNote)
+	: frequency(Frequency(midiNote)), midiNote(midiNote), pitch(Pitch(midiNote))
 	{}
     Note(Frequency noteFrequency)
 	: frequency(noteFrequency), midiNote(MidiNote(noteFrequency)), pitch(noteFrequency)
