@@ -26,7 +26,7 @@ class Frequency
 {
 public:
     Frequency():frequency(0.0f){};
-    Frequency(float noteFrequency):frequency(noteFrequency){}
+    Frequency(float noteFrequency);
     Frequency(MidiNote midiNote);
     Frequency(const Pitch& notePitch);
     double get() const { return frequency; }

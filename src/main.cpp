@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
     }
     catch(std::exception& e)
     {
-	std::cerr << e.what() << '\n';
+	std::cerr << "Error: " << e.what() << '\n';
 	std::exit(-1);
     }
 
@@ -101,4 +101,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

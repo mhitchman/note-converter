@@ -30,8 +30,17 @@ int MidiNote::getRounded() const
  * FREQUENCY *
  *************/
 
+Frequency::Frequency(float noteFrequency)
+    :frequency(noteFrequency)
+{
+    if (noteFrequency <= 0)
+    {
+	throw std::invalid_argument("Frequency must be greater than 0");
+    }
+}
+
 Frequency::Frequency(MidiNote midiNote)
-    :frequency(0.0)
+    :frequency(1.0)
 {
     frequency = std::pow(2.0, (midiNote.get() - 69.0) / 12) * 440;
 }
