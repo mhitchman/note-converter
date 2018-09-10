@@ -42,9 +42,9 @@ public:
     Pitch(Frequency noteFrequency);
     Pitch(MidiNote midiNote);
 
-    void operator=(const Frequency& noteFrequency);
-    void operator=(const Pitch& pitch);
-    void operator=(const MidiNote& midiNote);
+    Pitch& operator=(const Frequency& noteFrequency);
+    Pitch& operator=(const Pitch& pitch);
+    Pitch& operator=(const MidiNote& midiNote);
 
     std::string get(){ return note + modifier + octave; }
     std::ostream& operator<<(std::ostream& os);

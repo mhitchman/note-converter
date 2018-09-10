@@ -169,22 +169,25 @@ void Pitch::convertToMidiRepresentation()
     midiRepresentation = notesInScale + octaveNumber * notesInScale + noteIndex;
 }
     
-void Pitch::operator=(const Frequency& noteFrequency)
+Pitch& Pitch::operator=(const Frequency& noteFrequency)
 {
     *this = Pitch(noteFrequency);
+    return *this;
 }
 
-void Pitch::operator=(const MidiNote& midiNote)
+Pitch& Pitch::operator=(const MidiNote& midiNote)
 {
     *this = Pitch(midiNote);
+    return *this;
 }
 
-void Pitch::operator=(const Pitch& pitch)
+Pitch& Pitch::operator=(const Pitch& pitch)
 {
     this->note = pitch.note;
     this->modifier = pitch.modifier;
     this->octave = pitch.octave;
     this->midiRepresentation = pitch.midiRepresentation;
+    return *this;
 }
 
 Pitch::Pitch(Frequency noteFrequency)
