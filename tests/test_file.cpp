@@ -77,4 +77,10 @@ TEST_CASE ( "Pitch" )
 	    REQUIRE ( pitch.get() == "ds" );
 	}
     }
+
+    SECTION ( "MIDI Representation" )
+    {
+	Pitch pitch("A4");
+	REQUIRE ( pitch.getMidi().get() == Approx(69.0f) );
+    }
 }

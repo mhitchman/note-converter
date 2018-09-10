@@ -208,12 +208,15 @@ std::string Pitch::validateOctaveValue(char oct, bool throwError)
     return result;
 }
 
-
 void Pitch::convertToMidiRepresentation()
 {
-
+    // Get the index of the note from the possibleNoteNames array
     int noteIndex = std::distance(possibleNoteNames.begin(),
 				  std::find(possibleNoteNames.begin(), possibleNoteNames.end(), note[0]));
+
+    // Use that to get the lowest midi value for the note
+    noteIndex = noteIndex < 3 ? 2 * noteIndex : noteIndex - 1 + noteIndex;
+
     if (!modifier.empty())
     {	
 	if (modifier[0] == sharp)
