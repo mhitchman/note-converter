@@ -228,7 +228,3 @@ Pitch::Pitch(MidiNote midiNote)
 }
 
 std::ostream& Pitch::operator<<(std::ostream& os){ return os; }
-
-Note::Note(std::string /*noteName*/){}
-Note::Note(Frequency /*noteFrequency*/){}
-Note::Note(Pitch /*notePitch*/){}
