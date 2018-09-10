@@ -229,7 +229,7 @@ void Pitch::convertToMidiRepresentation()
 	}
     }
 
-    int notesInScale = 12;
-    int octaveNumber = std::stoi(octave);
+    const int notesInScale = 12;
+    const int octaveNumber = octave.empty() ? 0 : std::stoi(octave);
     midiRepresentation = notesInScale + octaveNumber * notesInScale + noteIndex;
 }  

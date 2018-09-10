@@ -68,19 +68,23 @@ TEST_CASE ( "Pitch" )
 
     SECTION ( "MIDI -> Pitch" )
     {
-	{
-	    Pitch pitch = MidiNote(69);
-	    REQUIRE ( pitch.get() == "a4" );
-	}
-	{
-	    Pitch pitch = MidiNote(3);
-	    REQUIRE ( pitch.get() == "ds" );
-	}
+
+	Pitch pitch = MidiNote(69);
+	REQUIRE ( pitch.get() == "a4" );
+
+	pitch = MidiNote(3);
+	REQUIRE ( pitch.get() == "ds" );
     }
 
     SECTION ( "MIDI Representation" )
     {
 	Pitch pitch("A4");
 	REQUIRE ( pitch.getMidi().get() == Approx(69.0f) );
+    }
+
+    SECTION ( "Pitch without octave" )
+    {
+	Pitch pitch("A");
+	REQUIRE ( pitch.get() == "a" );
     }
 }
