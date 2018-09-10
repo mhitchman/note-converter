@@ -1,3 +1,6 @@
+#ifndef NOTE_H
+#define NOTE_H
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -15,7 +18,6 @@ public:
 
     int getRounded() const;
     float get() const { return midiNote; }
-    std::ostream& operator<<(std::ostream& os);
 private:
     float midiNote;
 };
@@ -29,7 +31,6 @@ public:
     Frequency(const Pitch& notePitch);
     double get() const { return frequency; }
     double getRounded() const;
-    std::ostream& operator<<(std::ostream& os);
 private:
     double frequency;
 };
@@ -47,9 +48,8 @@ public:
     Pitch& operator=(const MidiNote& midiNote);
 
     std::string get(){ return note + modifier + octave; }
-    std::ostream& operator<<(std::ostream& os);
-
     MidiNote getMidi() const { return midiRepresentation; }
+    
 private:
     bool validatePitchString(std::string pitchName);
     char validateNoteName(char note);
@@ -80,12 +80,14 @@ public:
     : frequency(Frequency(notePitch)), midiNote(MidiNote(notePitch)), pitch(notePitch)
 	{}
 
-    Frequency getFrequency() { return frequency; }
-    MidiNote getMidiNote() { return midiNote; }
-    Pitch getPitch() { return pitch; }
+    double getFrequency() { return frequency.get(); }
+    float getMidiNote() { return midiNote.get(); }
+    std::string getPitch() { return pitch.get(); }
 
 private:
     Frequency frequency;
     MidiNote midiNote;
     Pitch pitch;
 };
+
+#endif
