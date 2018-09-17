@@ -1,7 +1,7 @@
 #include <Note.h>
 #include <algorithm>
-#include <cmath>
 #include <cctype>
+#include <cmath>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
@@ -123,7 +123,7 @@ Pitch::Pitch(const MidiNote& midiNote)
 	modifier = sharp;
     }
 
-    int octaveNumber = static_cast<int>(std::floor(midiNote.getRounded() / 12.0f - 1.0));
+    auto octaveNumber = static_cast<int>(std::floor(midiNote.getRounded() / 12.0f - 1.0));
     if (octaveNumber >= 0)
     {
 	octave = std::to_string(octaveNumber);

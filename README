@@ -25,7 +25,7 @@ As4
 #+END_SRC
 ** Frequency
 Must be a single positive floating point number which is interpreted as Hz.
-In the case where the the frequency doesn't exactly match a pitch the utility rounds down to the nearest pitch.
+In the case where the the frequency doesn't exactly match a pitch the utility rounds to the nearest pitch.
 MIDI numbers are always converted accurately to several decimal points even into negative numbers in case that is required.
 ** MIDI
 Takes a single positive integer.

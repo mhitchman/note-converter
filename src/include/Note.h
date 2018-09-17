@@ -53,7 +53,7 @@ public:
     
 private:
     bool validatePitchString(std::string pitchName);
-    char validateNoteName(char note);
+    char validateNoteName(char noteName);
     std::string validateModifier(const char& mod, bool throwError=false);
     std::string validateOctaveValue(char oct, bool throwError=false);
     void convertToMidiRepresentation();
