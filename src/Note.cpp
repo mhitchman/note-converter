@@ -1,6 +1,7 @@
 #include <Note.h>
 #include <algorithm>
 #include <cmath>
+#include <cctype>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
@@ -12,7 +13,7 @@
 MidiNote::MidiNote(const Frequency& noteFrequency)
     :midiNote(0)
 {
-    midiNote = 12 * std::log2(noteFrequency.get() / 440) + 69;
+    midiNote = 12 * std::log2(static_cast<float>(noteFrequency.get()) / 440) + 69;
 }
 
 MidiNote::MidiNote(const Pitch& notePitch)
@@ -22,7 +23,7 @@ MidiNote::MidiNote(const Pitch& notePitch)
 int MidiNote::getRounded() const
 {
     float note = midiNote;
-    return std::round(note);
+    return static_cast<int>(std::round(note));
 }
 
 
@@ -106,6 +107,7 @@ Pitch::Pitch(const MidiNote& midiNote)
     midiRepresentation = midiNote;
     int normalisedValue = midiNote.getRounded() % 12;
     float difference;
+
     if (normalisedValue < 5)
     {
 	difference = normalisedValue / 2.0f;
@@ -121,7 +123,7 @@ Pitch::Pitch(const MidiNote& midiNote)
 	modifier = sharp;
     }
 
-    int octaveNumber = std::floor(midiNote.getRounded() / 12.0f - 1.0);
+    int octaveNumber = static_cast<int>(std::floor(midiNote.getRounded() / 12.0f - 1.0));
     if (octaveNumber >= 0)
     {
 	octave = std::to_string(octaveNumber);
@@ -175,20 +177,20 @@ bool Pitch::validatePitchString(std::string pitchName)
     return result;
 }
 
-char Pitch::validateNoteName(char note)
+char Pitch::validateNoteName(char noteName)
 {
     // If the note is valid return it as a string
     // Otherwise throw an error
 
-    auto position = std::find(possibleNoteNames.begin(), possibleNoteNames.end(),  note); 
+    auto position = std::find(possibleNoteNames.begin(), possibleNoteNames.end(),  noteName); 
     if ( position == possibleNoteNames.end())
     {
 	std::ostringstream err;
-	err << "Invalid note name: " << note;
+	err << "Invalid note name: " << noteName;
 	throw std::invalid_argument(err.str());
     }
 
-    return note;
+    return noteName;
 }
 
 std::string Pitch::validateModifier(const char& mod, bool throwError)

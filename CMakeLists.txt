@@ -6,7 +6,14 @@ find_program(CLANG_TIDY clang-tidy)
 
 project(noteconverter LANGUAGES CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS YES)
-set(custom_compile_options -Wall -Wextra -Wpedantic)
+
+add_library(project_warnings INTERFACE)
+
+if(MSVC)
+    target_compile_options(project_warnings INTERFACE /W4)
+else()
+    target_compile_options(project_warnings INTERFACE -Wall -Wextra -Wpedantic)
+endif()
 
 add_subdirectory(third_party)
 add_subdirectory(tests)
