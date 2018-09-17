@@ -1,7 +1,7 @@
 #ifndef NOTE_H
 #define NOTE_H
 
-#include <vector>
+#include <array>
 #include <string>
 #include <iostream>
 
@@ -11,7 +11,7 @@ class Pitch;
 class MidiNote
 {
 public:
-    MidiNote():midiNote(0){};
+    MidiNote():midiNote(0.0f){};
     MidiNote(int noteNumber):midiNote(noteNumber){}
     MidiNote(const Frequency& noteFrequency);
     MidiNote(const Pitch& notePitch);
@@ -25,9 +25,9 @@ private:
 class Frequency
 {
 public:
-    Frequency():frequency(0.0f){};
+    Frequency():frequency(1.0){};
     Frequency(float noteFrequency);
-    Frequency(MidiNote midiNote);
+    Frequency(const MidiNote& midiNote);
     Frequency(const Pitch& notePitch);
     double get() const { return frequency; }
     double getRounded() const;
@@ -40,9 +40,10 @@ class Pitch
 public:
     Pitch(){};
     Pitch(std::string noteName);
-    Pitch(Frequency noteFrequency);
-    Pitch(MidiNote midiNote);
+    Pitch(const Frequency& noteFrequency);
+    Pitch(const MidiNote& midiNote);
 
+    Pitch& operator=(const std::string& noteName);
     Pitch& operator=(const Frequency& noteFrequency);
     Pitch& operator=(const Pitch& pitch);
     Pitch& operator=(const MidiNote& midiNote);
@@ -57,7 +58,7 @@ private:
     std::string validateOctaveValue(char oct, bool throwError=false);
     void convertToMidiRepresentation();
    
-    const std::vector<char> possibleNoteNames = {'c', 'd', 'e', 'f', 'g', 'a', 'b'};
+    const std::array<char, 7> possibleNoteNames = {'c', 'd', 'e', 'f', 'g', 'a', 'b'};
     const char sharp = 's';
     const char flat = 'f';
     
@@ -74,7 +75,7 @@ public:
     Note(const MidiNote& midiNote)
 	: frequency(Frequency(midiNote)), midiNote(midiNote), pitch(Pitch(midiNote))
 	{}
-    Note(Frequency noteFrequency)
+    Note(const Frequency& noteFrequency)
 	: frequency(noteFrequency), midiNote(MidiNote(noteFrequency)), pitch(noteFrequency)
 	{}
     Note(Pitch notePitch)

@@ -39,7 +39,7 @@ Frequency::Frequency(float noteFrequency)
     }
 }
 
-Frequency::Frequency(MidiNote midiNote)
+Frequency::Frequency(const MidiNote& midiNote)
     :frequency(1.0)
 {
     frequency = std::pow(2.0, (midiNote.get() - 69.0) / 12) * 440;
@@ -95,13 +95,13 @@ Pitch::Pitch(std::string noteName)
     convertToMidiRepresentation();
 }
 
-Pitch::Pitch(Frequency noteFrequency)
+Pitch::Pitch(const Frequency& noteFrequency)
 {
     MidiNote midiStep(noteFrequency);
     *this = Pitch(midiStep);
 }
 
-Pitch::Pitch(MidiNote midiNote)
+Pitch::Pitch(const MidiNote& midiNote)
 {
     midiRepresentation = midiNote;
     int normalisedValue = midiNote.getRounded() % 12;
@@ -114,7 +114,7 @@ Pitch::Pitch(MidiNote midiNote)
     {
 	difference = (normalisedValue - 1) / 2.0f;
     }
-    note = possibleNoteNames[normalisedValue - difference];
+    note = possibleNoteNames.at(normalisedValue - difference);
     float fractionalPart = std::modf(difference, &difference);
     if (fractionalPart != 0)
     {
@@ -130,6 +130,12 @@ Pitch::Pitch(MidiNote midiNote)
     {
 	octave.clear();
     }
+}
+
+Pitch& Pitch::operator=(const std::string& noteName)
+{
+    *this = Pitch(noteName);
+    return *this;
 }
 
 Pitch& Pitch::operator=(const Frequency& noteFrequency)
