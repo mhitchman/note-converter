@@ -1,0 +1,31 @@
+# -*- mode: org; -*-
+#+TITLE: Noteconv
+Quickly convert between pitch, MIDI number and frequency.
+* Building
+1. Clone the repository and initialise the submodules =git clone https://github.com/mhitchman/note-converter.git --recursive=
+2. Change into the note-converter directory and create a build folder =mkdir build && cd build=
+3. =cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<install location>=
+4. Build with =cmake --build .=
+5. Install with =cmake --build . --target install=. The binary =noteconv= will be placed in a bin folder in the install location specified above.
+* Usage
+Make sure the noteconv binary is on the PATH and run =noteconv= from the command line with the desired options.
+Use the =--help= or =-h= flag for information on the supported options.
+
+The utility takes either a pitch name, a MIDI number or a frequency in Hertz and converts that to the other two units and prints out all three.
+Specific output units can be selected with fairly opaque switches, check the =--help= text for info.
+
+The following formats are recognised:
+** Pitch
+Pitch is made up of a note number, an optional a modifier (sharp (s) or flat (f)) and an optional octave number in that order.
+Noteconv uses the standard where A4 is 440 Hz and MIDI note number 69.
+Notes below octave 0 are just printed without an octave number.
+- Example: A sharp in the 4^th octave looks like:
+#+BEGIN_SRC
+As4
+#+END_SRC
+** Frequency
+Must be a single positive floating point number which is interpreted as Hz.
+In the case where the the frequency doesn't exactly match a pitch the utility rounds down to the nearest pitch.
+MIDI numbers are always converted accurately to several decimal points even into negative numbers in case that is required.
+** MIDI
+Takes a single positive integer.
