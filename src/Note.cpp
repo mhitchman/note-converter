@@ -245,6 +245,8 @@ void Pitch::convertToMidiRepresentation()
     }
 
     const int notesInScale = 12;
-    const int octaveNumber = octave.empty() ? 0 : std::stoi(octave);
+    // Note name without an octave should be the equivalent to octave -1
+    // e.g. prevents a having the same midi number as a0
+    const int octaveNumber = octave.empty() ? -1 : std::stoi(octave);
     midiRepresentation = notesInScale + octaveNumber * notesInScale + noteIndex;
 }  
